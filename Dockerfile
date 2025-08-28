@@ -1,5 +1,5 @@
 # Use OpenJDK 24 JDK Slim Bookworm as the base image
-FROM openjdk:24-jdk-slim-bookworm
+FROM openjdk:21-jdk-slim-bookworm
 
 # Set working directory
 WORKDIR /app

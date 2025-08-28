@@ -13,7 +13,7 @@ class ChangeHTTPCode:
             headers = {'Content-Type': 'application/json'}
             raw_json = json.loads(flow.request.text)
             body = {'url': raw_json['context']['client']['originalUrl']}
-            filter_endpoint = "http://localhost:8081/filter"
+            filter_endpoint = "http://content-filter-service:8080/filter"
 
             if (self.filter in flow.request.pretty_url):
                 ctx.log.info("Sending URL to filter service: "+flow.request.pretty_url)
@@ -28,7 +28,6 @@ class ChangeHTTPCode:
 
                 if (response.status_code != 200 or response_data['allowed'] == False):
                     ctx.log.info("Content blocked for url " + flow.request.pretty_url)
-#                    flow.kill()
                     flow.response = http.Response.make(
                         403,
                         b"This request has been blocked by mitmproxy",

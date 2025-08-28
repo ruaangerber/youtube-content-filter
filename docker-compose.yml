@@ -1,5 +1,5 @@
 services:
-  app:
+  content-filter-service:
     build:
       context: .
       dockerfile: Dockerfile
@@ -8,3 +8,27 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=docker
     restart: unless-stopped
+    networks:
+      - content-filter-network
+
+  mitmproxy:
+    image: mitmproxy/mitmproxy:latest
+    ports:
+      - "8090:8090"
+      - "8081:8081"
+    command: >
+      mitmdump
+      --listen-host 0.0.0.0
+      --listen-port 8090
+      --web-host 0.0.0.0
+      --web-port 8081
+      --scripts /scripts
+    volumes:
+      - ./.scripts:/scripts
+      - ./certs:/home/mitmproxy/.mitmproxy
+    restart: unless-stopped
+    networks:
+      - content-filter-network
+
+networks:
+  content-filter-network:
