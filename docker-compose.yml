@@ -12,17 +12,12 @@ services:
       - content-filter-network
 
   mitmproxy:
-    image: mitmproxy/mitmproxy:latest
+    build:
+      context: .
+      dockerfile: Dockerfile.mitmproxy
     ports:
       - "8090:8090"
       - "8081:8081"
-    command: >
-      mitmdump
-      --listen-host 0.0.0.0
-      --listen-port 8090
-      --web-host 0.0.0.0
-      --web-port 8081
-      --scripts /scripts
     volumes:
       - ./.scripts:/scripts
       - ./certs:/home/mitmproxy/.mitmproxy

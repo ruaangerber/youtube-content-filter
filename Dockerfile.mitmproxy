@@ -1,0 +1,8 @@
+FROM mitmproxy/mitmproxy:latest
+
+USER root
+RUN pip install requests urllib3 beautifulsoup4 lxml
+
+USER mitmproxy
+
+ENTRYPOINT ["mitmweb", "--listen-host", "0.0.0.0", "--listen-port", "8090", "--web-host", "0.0.0.0", "--web-port", "8081", "-s", "/scripts/youtube-filter.py"]
