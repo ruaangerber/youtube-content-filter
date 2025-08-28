@@ -1,5 +1,5 @@
-# Use OpenJDK 24 as the base image
-FROM openjdk:24-jdk-slim as build
+# Use OpenJDK 24 JDK Slim Bookworm as the base image
+FROM openjdk:24-jdk-slim-bookworm
 
 # Set working directory
 WORKDIR /app
@@ -19,17 +19,8 @@ COPY src src/
 # Build the application
 RUN ./gradlew build -x test
 
-# Use a smaller runtime image
-FROM openjdk:24-jre-slim
-
-# Set working directory
-WORKDIR /app
-
-# Copy the built JAR from the build stage
-COPY --from=build /app/build/libs/*.jar app.jar
-
 # Expose the default Spring Boot port
 EXPOSE 8080
 
 # Run the application
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-jar", "build/libs/*.jar"]
